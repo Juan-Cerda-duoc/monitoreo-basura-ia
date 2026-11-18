@@ -1,0 +1,9 @@
+flask
+opencv-python-headless
+ultralytics
+slack-sdk
+supabase
+pyserial
+pandas
+openpyxl
+requests
