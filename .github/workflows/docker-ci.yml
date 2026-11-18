@@ -8,7 +8,6 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
 
 jobs:
   build-and-push:
@@ -28,6 +27,9 @@ jobs:
 
       - name: Validar sintaxis de main.py
         run: python -m py_compile main.py
+
+      - name: Normalizar nombre de imagen a minúsculas
+        run: echo "IMAGE_NAME=$(echo '${{ github.repository }}' | tr '[:upper:]' '[:lower:]')" >> $GITHUB_ENV
 
       - name: Iniciar sesión en GitHub Container Registry
         if: github.event_name == 'push'
