@@ -1,5 +1,6 @@
 services:
   broker-monitoreo:
+    image: ghcr.io/juan-cerda-duoc/monitoreo-basura-ia:latest
     build: .
     container_name: monitoreo-ia
     restart: unless-stopped
@@ -9,6 +10,15 @@ services:
       - .env
     volumes:
       - ./data:/app/data
-    devices:
-      - "/dev/video0:/dev/video0"       # Cámara USB en entornos Linux
-      - "/dev/ttyUSB0:/dev/ttyUSB0"     # Puerto Serial Arduino en Linux (/dev/ttyACM0 si aplica)
+    # --- DESCOMENTAR EN LINUX O RASPBERRY PI ---
+    # devices:
+    #   - "/dev/video0:/dev/video0"
+    #   - "/dev/ttyUSB0:/dev/ttyUSB0"
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: monitoreo-cloudflare
+    restart: unless-stopped
+    command: tunnel --no-autoupdate --url http://broker-monitoreo:5000
+    depends_on:
+      - broker-monitoreo
